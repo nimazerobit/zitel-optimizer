@@ -1,0 +1,8 @@
+{
+    "modem_ip": "192.168.0.254",
+    "username": "farabord",
+    "password": "farabord",
+    "valid_earfcn": [42490, 42690, 42890],
+    "ping_check_ip": "8.8.8.8",
+    "speedtest_cli_path": "speedtest.exe"
+}
