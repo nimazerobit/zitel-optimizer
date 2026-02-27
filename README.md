@@ -7,11 +7,12 @@ This project scans all valid frequencies, checks the bandwidth of each, and fina
 
 ## Quick Start
 
-If you're using Windows OS, you can use executable file available in [release section](https://github.com/nimazerobit/zitel-optimizer/releases). Also, if your operating system is not Windows or you want to run from source code, you can use [this section](#how-to-run-from-source).
+If you're using Windows OS, you can use [ZitelOptimizer.zip](https://github.com/nimazerobit/zitel-optimizer/releases/latest/download/zitel-optimizer.zip) file available in [release section](https://github.com/nimazerobit/zitel-optimizer/releases). Also, if your operating system is not Windows or you want to run from source code, you can use [this section](#how-to-run-from-source).
 
-1. Download **zitel optimizer** executable from <a href="https://github.com/nimazerobit/zitel-optimizer/releases">release section</a>.
-2. Open **CMD** or **PowerShell** then run executable. (You can also use the script by double-clicking it, but it is not recommended.)
-3. Follow instructions in script.
+1. Download [**ZitelOptimizer.zip**](https://github.com/nimazerobit/zitel-optimizer/releases/latest/download/zitel-optimizer.zip) from <a href="https://github.com/nimazerobit/zitel-optimizer/releases">release section</a>.
+2. Extract the ZIP file.
+3. Open **CMD** or **PowerShell** then run executable file.
+4. Follow instructions in script.
 
 > [!NOTE]
 > You can also use the script by double-clicking it, but it is not recommended.
