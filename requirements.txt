@@ -1,2 +1,3 @@
 rich
 ping3
+requests
