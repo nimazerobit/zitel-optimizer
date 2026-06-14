@@ -58,8 +58,8 @@ async def login_to_modem(modem_ip, command_codes):
         except ValueError as err:
             console.print(f"[red][-] {err}. Please try again.[/red]")
             sys.exit(1)
-        except:
-            console.print("[red][-] An unexpected error occurred. Please try again.[/red]")
+        except Exception as e:
+            console.print(f"[red][-] An unexpected error occurred: {e}[/red]")
             sys.exit(1)
 
 # ---------------- Get current cell info ----------------
