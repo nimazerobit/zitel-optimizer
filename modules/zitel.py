@@ -108,6 +108,7 @@ class Zitel:
         self._address = address
         self._codes = command_codes
         self._session = requests.Session()
+        self._session.proxies = {}
         self._session.headers.update({"Content-Type": "application/json"})
 
     def _generate_session_id(self) -> str:
