@@ -5,18 +5,6 @@ This project scans all valid frequencies, checks the bandwidth of each, and fina
 > [!WARNING]
 > There is no guarantee of increased bandwidth. This script simply checks the different frequency bands and checks the bandwidth of each and finally based on your decision you can either manually select one of the frequencies or let the script automatically lock the fastest frequency on the modem.
 
-## Quick Start
-
-If you're using Windows OS, you can use [ZitelOptimizer.zip](https://github.com/nimazerobit/zitel-optimizer/releases/latest/download/zitel-optimizer.zip) file available in [release section](https://github.com/nimazerobit/zitel-optimizer/releases). Also, if your operating system is not Windows or you want to run from source code, you can use [this section](#how-to-run-from-source).
-
-1. Download [**ZitelOptimizer.zip**](https://github.com/nimazerobit/zitel-optimizer/releases/latest/download/zitel-optimizer.zip) from <a href="https://github.com/nimazerobit/zitel-optimizer/releases">release section</a>.
-2. Extract the ZIP file.
-3. Open **CMD** or **PowerShell** then run executable file.
-4. Follow instructions in script.
-
-> [!NOTE]
-> You can also use the script by double-clicking it, but it is not recommended.
-
 ## How to run from source?
 
 > [!TIP]
