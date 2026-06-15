@@ -108,6 +108,7 @@ class Zitel:
         self._address = address
         self._codes = command_codes
         self._session = requests.Session()
+        self._session.trust_env = False
         self._session.proxies = {}
         self._session.headers.update({"Content-Type": "application/json"})
 
