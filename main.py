@@ -163,9 +163,6 @@ async def main():
             selected_earfcn = Prompt.ask("Enter EARFCN", choices=[str(e) for e in valid_earfcn])
 
     if selected_earfcn is None:
-        if not args.yes:
-            if not Confirm.ask("Do you want to scan for best EARFCN?"):
-                return
         fastest_earfcn, scan_results = await scan_best_earfcn(zitel, session_id, current_cell_info, config)
         if not scan_results:
             console.print("[red][-] No valid EARFCN results found.[/red]")
@@ -184,10 +181,6 @@ async def main():
                 f"[bold green][+] Auto-selected fastest EARFCN: "
                 f"[cyan]{selected_earfcn}[/cyan][/bold green]"
             )
-
-    if not args.yes:
-        if not Confirm.ask(f"Do you want to set EARFCN to {selected_earfcn}?"):
-            return
 
     await set_earfcn(zitel, session_id, current_cell_info, config, selected_earfcn)
 
