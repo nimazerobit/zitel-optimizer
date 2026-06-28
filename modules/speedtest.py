@@ -20,21 +20,27 @@ class SpeedTest:
     async def run(self) -> SpeedTestResult | None:
         try:
             result = subprocess.run(
-                [self.speedtest_cli_path, "-f", "json"],
+                [
+                    self.speedtest_cli_path,
+                    "--accept-gdpr",
+                    "--accept-license",
+                    "-f",
+                    "json",
+                ],
                 capture_output=True,
                 text=True,
                 check=False
             )
 
             if result.returncode != 0:
-                print(f"[red][-] Speedtest error: {result.stderr}[/red]")
+                print(f"[red][-] Speedtest error:[/red]\n{result.stderr}")
                 return None
 
             data = json.loads(result.stdout)
             return self._parse_result(data)
 
         except Exception as e:
-            print(f"[red][-] An exception occurred while running speedtest:[/red] {e}")
+            print(f"[red][-] Exception while running speedtest:[/red] {e}")
             return None
 
     @staticmethod
