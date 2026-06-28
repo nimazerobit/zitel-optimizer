@@ -1,7 +1,7 @@
 import asyncio
 import argparse
 from modules.speedtest import SpeedTest
-from modules.zitel import Zitel, CellInfo
+from modules.zitel import Zitel
 from modules.helper import Helper
 from rich.console import Console
 from rich.panel import Panel
@@ -63,13 +63,13 @@ async def login_to_modem(modem_ip, command_codes):
             sys.exit(1)
 
 # ---------------- Get current cell info ----------------
-async def get_current_cell_info(zitel, session_id) -> CellInfo:
+async def get_current_cell_info(zitel, session_id) -> dict:
     with console.status("[bold yellow] Retrieving current cellular information from modem...") as _:
         current_cell_info = zitel.get_current_cell_info(session_id)
-        if not (current_cell_info.cell_id == 0 and current_cell_info.earfcn == 0):
-            console.print(Panel.fit(f"[green][+] Cell ID:[/green] {current_cell_info.cell_id}\n" +
-                                    f"[green][+] EARFCN:[/green] {current_cell_info.earfcn}\n" +
-                                    f"[green][+] Locked:[/green] {current_cell_info.locked}",
+        if not (current_cell_info["cell_id"] == 0 and current_cell_info["earfcn"] == 0):
+            console.print(Panel.fit(f"[green][+] Cell ID:[/green] {current_cell_info['cell_id']}\n" +
+                                    f"[green][+] EARFCN:[/green] {current_cell_info['earfcn']}\n" +
+                                    f"[green][+] Locked:[/green] {current_cell_info['locked']}",
                                     title="Cell Info"))
             return current_cell_info
         else:
@@ -83,8 +83,8 @@ async def scan_best_earfcn(zitel, session_id, current_cell_info, config):
     try:
         with console.status("[bold yellow] Scanning for best EARFCN...") as status:
             for earfcn in config["valid_earfcn"]:
-                console.print(f"[yellow][!] Setting EARFCN to [cyan]{earfcn}[/cyan] on Cell ID [cyan]{current_cell_info.cell_id}[/cyan][/yellow]")
-                result = zitel.set_earfcn(earfcn, current_cell_info.cell_id, session_id)
+                console.print(f"[yellow][!] Setting EARFCN to [cyan]{earfcn}[/cyan] on Cell ID [cyan]{current_cell_info['cell_id']}[/cyan][/yellow]")
+                result = zitel.set_earfcn(earfcn, current_cell_info["cell_id"], session_id)
                 if result:
                     console.print("[green][+] EARFCN set successfully.[/green]")
                     status.update("[bold yellow] Waiting for internet connection...")
@@ -99,12 +99,11 @@ async def scan_best_earfcn(zitel, session_id, current_cell_info, config):
                             console.print("[red][-] Failed to run speedtest.[/red]")
                     else:
                         console.print("[red][-] Failed to connect to the Internet.[/red]")
-
     except (KeyboardInterrupt, asyncio.CancelledError):
         console.print("\n[bold yellow][!] Scan interrupted by user.[/bold yellow]")
         if not speedtest_results:
             raise
-
+    
     if not speedtest_results:
         return None, {}
 
@@ -118,21 +117,20 @@ async def scan_best_earfcn(zitel, session_id, current_cell_info, config):
         f"[cyan]{fastest_earfcn}[/cyan] with Download Speed -> "
         f"[cyan]{speedtest_results[fastest_earfcn].download} Mbps[/cyan]"
     )
-
     return fastest_earfcn, speedtest_results
 
 async def set_earfcn(zitel, session_id, current_cell_info, config, target_earfcn):
     with console.status("[bold yellow] Setting modem to the fastest EARFCN...") as status:
-        result = zitel.set_earfcn(target_earfcn, current_cell_info.cell_id, session_id)
+        result = zitel.set_earfcn(target_earfcn, current_cell_info["cell_id"], session_id)
         if result:
             console.print(f"[green][+] EARFCN set to [cyan]{target_earfcn}[/cyan] successfully.[/green]")
             status.update("[bold yellow] Waiting for internet connection...")
             await asyncio.sleep(3)
             if await helper.wait_for_internet(config["ping_check_ip"]):
-                status.update(f"[bold yellow] Checking ping time to [cyan]{config["ping_check_ip"]}[/cyan]...")
+                status.update(f"[bold yellow] Checking ping time to [cyan]{config['ping_check_ip']}[/cyan]...")
                 ping = helper.check_ping(config["ping_check_ip"])
                 if ping > 0:
-                    console.print(f"[green][+] Average ping to [cyan]{config["ping_check_ip"]}[/cyan] -> [cyan]{ping:.4f} ms[/cyan][/green]")
+                    console.print(f"[green][+] Average ping to [cyan]{config['ping_check_ip']}[/cyan] -> [cyan]{ping:.4f} ms[/cyan][/green]")
                 else:
                     console.print("[red][-] Failed to connect to the Internet.[/red]")
             else:
@@ -161,18 +159,15 @@ async def main():
         fastest_earfcn, scan_results = await scan_best_earfcn(
             zitel, session_id, current_cell_info, config
         )
-
         if not scan_results:
             console.print("[red][-] No valid EARFCN results found.[/red]")
             return
-
+            
         selected_earfcn = fastest_earfcn
-
         console.print(
             f"[bold green][+] Quick mode selected fastest EARFCN: "
             f"[cyan]{selected_earfcn}[/cyan][/bold green]"
         )
-
         await set_earfcn(
             zitel,
             session_id,
@@ -195,7 +190,7 @@ async def main():
         fastest_earfcn, scan_results = await scan_best_earfcn(
             zitel, session_id, current_cell_info, config
         )
-
+        
         if not scan_results:
             console.print("[red][-] No valid EARFCN results found.[/red]")
             return
