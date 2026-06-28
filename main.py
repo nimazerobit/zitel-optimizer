@@ -143,7 +143,7 @@ async def set_earfcn(zitel, session_id, current_cell_info, config, target_earfcn
 
 async def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-y", "--yes", action="store_true")
+    parser.add_argument("--quick", action="store_true")
     parser.add_argument("--info", action="store_true")
     args = parser.parse_args()
 
@@ -157,13 +157,45 @@ async def main():
 
     selected_earfcn = None
 
-    if not args.yes:
-        if Confirm.ask("Do you want to manually select EARFCN from valid list?"):
-            valid_earfcn = config["valid_earfcn"]
-            selected_earfcn = Prompt.ask("Enter EARFCN", choices=[str(e) for e in valid_earfcn])
+    if args.quick:
+        fastest_earfcn, scan_results = await scan_best_earfcn(
+            zitel, session_id, current_cell_info, config
+        )
+
+        if not scan_results:
+            console.print("[red][-] No valid EARFCN results found.[/red]")
+            return
+
+        selected_earfcn = fastest_earfcn
+
+        console.print(
+            f"[bold green][+] Quick mode selected fastest EARFCN: "
+            f"[cyan]{selected_earfcn}[/cyan][/bold green]"
+        )
+
+        await set_earfcn(
+            zitel,
+            session_id,
+            current_cell_info,
+            config,
+            selected_earfcn
+        )
+        return
+
+    if Confirm.ask("Do you want to manually select EARFCN from valid list?"):
+        valid_earfcn = config["valid_earfcn"]
+        selected_earfcn = int(
+            Prompt.ask(
+                "Enter EARFCN",
+                choices=[str(e) for e in valid_earfcn]
+            )
+        )
 
     if selected_earfcn is None:
-        fastest_earfcn, scan_results = await scan_best_earfcn(zitel, session_id, current_cell_info, config)
+        fastest_earfcn, scan_results = await scan_best_earfcn(
+            zitel, session_id, current_cell_info, config
+        )
+
         if not scan_results:
             console.print("[red][-] No valid EARFCN results found.[/red]")
             return

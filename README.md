@@ -42,7 +42,7 @@ python main.py
 
 | Argument  | Description |
 | :-------------- | :------------- |
-| `-y` or `--yes` | Use yes as default answer to prompts |
+| `--quick` | Auto select and set fastest EARFCN |
 | `--info` | Just show Cell Info |
 
 > I know they are few :)
