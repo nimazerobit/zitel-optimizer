@@ -1,7 +1,7 @@
-import subprocess
-import json
+import asyncio
 from dataclasses import dataclass
 from rich import print
+import speedtest
 
 # NOTE:
 # Download and upload speeds are in Mbps (megabits per second)
@@ -14,47 +14,41 @@ class SpeedTestResult:
     server: str
 
 class SpeedTest:
-    def __init__(self, speedtest_cli_path: str):
-        self.speedtest_cli_path = speedtest_cli_path
-
     async def run(self) -> SpeedTestResult | None:
         try:
-            result = subprocess.run(
-                [
-                    self.speedtest_cli_path,
-                    "--accept-gdpr",
-                    "--accept-license",
-                    "-f",
-                    "json",
-                ],
-                capture_output=True,
-                text=True,
-                check=False
-            )
-
-            if result.returncode != 0:
-                print(f"[red][-] Speedtest error:[/red]\n{result.stderr}")
-                return None
-
-            data = json.loads(result.stdout)
-            return self._parse_result(data)
+            return await asyncio.to_thread(self._run_speedtest)
 
         except Exception as e:
             print(f"[red][-] Exception while running speedtest:[/red] {e}")
             return None
 
     @staticmethod
+    def _run_speedtest() -> SpeedTestResult:
+        st = speedtest.Speedtest(secure=True)
+
+        st.get_best_server()
+
+        download_bps = st.download()
+        upload_bps = st.upload()
+
+        results = st.results.dict()
+        return SpeedTest._parse_result(results)
+
+    @staticmethod
     def _parse_result(data: dict) -> SpeedTestResult:
-        download_mbps = data["download"]["bandwidth"] * 8 / 1_000_000
-        upload_mbps = data["upload"]["bandwidth"] * 8 / 1_000_000
-        ping_ms = data["ping"]["latency"]
+        download_mbps = data["download"] / 1_000_000
+        upload_mbps = data["upload"] / 1_000_000
+        ping_ms = data["ping"]
 
         server_info = data["server"]
-        server_name = f'{server_info["name"]} ({server_info["location"]}, {server_info["country"]})'
+        server_name = (
+            f'{server_info["name"]} '
+            f'({server_info["country"]})'
+        )
 
         return SpeedTestResult(
             download=round(download_mbps, 2),
             upload=round(upload_mbps, 2),
             ping=round(ping_ms, 2),
-            server=server_name
+            server=server_name,
         )

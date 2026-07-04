@@ -82,7 +82,7 @@ class Workflow:
 
     # ---------------- EARFCN scan/apply ----------------
     async def scan_best_earfcn(self):
-        speedtest = SpeedTest(self.config["speedtest_cli_path"])
+        speedtest = SpeedTest()
         speedtest_results = {}
         cell_id = self.current_cell_info["cell_id"]
 
