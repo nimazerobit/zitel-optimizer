@@ -5,6 +5,9 @@ This project scans all valid frequencies, checks the bandwidth of each, and fina
 > [!WARNING]
 > There is no guarantee of increased bandwidth. This script simply checks the different frequency bands and checks the bandwidth of each and finally based on your decision you can either manually select one of the frequencies or let the script automatically lock the fastest frequency on the modem.
 
+> [!NOTE]
+> This project also works on, and has been tested with, Termux on Android.
+
 ## How to run from source?
 
 > [!TIP]
@@ -34,7 +37,6 @@ python main.py
     "password": "farabord",                 // MOST OF THE TIME THERE IS NO NEED TO CHANGE THIS
     "valid_earfcn": [42490, 42690, 42890],  // DON'T TOUCH THIS
     "ping_check_ip": "8.8.8.8",             // IP used to check internet connectivity
-    "speedtest_cli_path": "speedtest.exe"   // Path to SpeedTest CLI
 }
 ```
 
