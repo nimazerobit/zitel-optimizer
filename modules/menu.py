@@ -4,8 +4,8 @@ from .workflow import Workflow
 
 MENU_OPTIONS = {
     "1": "Show current cell info",
-    "2": "Scan for best EARFCN",
-    "3": "Quick Optimize",
+    "2": "Scan and manually select best EARFCN",
+    "3": "Scan and automatically select best EARFCN",
     "4": "Manually set EARFCN",
     "5": "Exit",
 }
@@ -31,6 +31,7 @@ class Menu:
 
             elif choice == "2":
                 await self.workflow.scan_best_earfcn()
+                await self._manual_select()
 
             elif choice == "3":
                 await self.workflow.quick_optimize()
