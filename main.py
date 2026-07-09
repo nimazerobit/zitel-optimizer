@@ -17,6 +17,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--info", action="store_true"
     )
+    parser.add_argument(
+        "--set", type=int, metavar="EARFCN", help="Manually set EARFCN without the menu"
+    )
     return parser.parse_args()
 
 async def bootstrap(workflow: Workflow) -> None:
@@ -49,6 +52,21 @@ async def main() -> None:
 
     if args.quick:
         await workflow.quick_optimize()
+        return
+
+    if args.set is not None:
+        valid_earfcn = workflow.config["valid_earfcn"]
+        if args.set not in valid_earfcn:
+            console.print(
+                f"[red][-] Invalid EARFCN: [cyan]{args.set}[/cyan]. Valid options: {valid_earfcn}[/red]"
+            )
+            return
+        if workflow.current_cell_info["earfcn"] == args.set:
+            console.print(
+                f"[yellow][!] EARFCN is already set to [cyan]{args.set}[/cyan]. Nothing to do.[/yellow]"
+            )
+            return
+        await workflow.set_earfcn(args.set)
         return
 
     await Menu(console, workflow).run()

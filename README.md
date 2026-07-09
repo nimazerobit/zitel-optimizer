@@ -46,6 +46,7 @@ python main.py
 | :-------------- | :------------- |
 | `--quick` | Auto select and set fastest EARFCN |
 | `--info` | Just show Cell Info |
+| `--set <EARFCN>` | Manually set EARFCN |
 
 > I know they are few :)
 
