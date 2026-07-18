@@ -54,4 +54,4 @@ python main.py
 <a href="https://www.youtube.com/watch?v=VnXP6QOyI80"><img src="https://i.ytimg.com/vi_webp/VnXP6QOyI80/maxresdefault.webp" alt="Buy Me A Coffee" style="border-radius: 20px;"/></a>
 
 ## Donate ❤️
-<a href="https://daramet.com/nimazerobit"><img src="https://panel.daramet.com/static/media/daramet-coffee-donate.91915073278a21c30769.png" alt="Buy Me A Coffee" style="height: 60px !important;"/></a>
+<a href="https://daramet.com/x"><img src="https://panel.daramet.com/static/media/daramet-coffee-donate.91915073278a21c30769.png" alt="Buy Me A Coffee" style="height: 60px !important;"/></a>
